@@ -1,0 +1,70 @@
+{
+    "project": "cpp05",
+    "content":
+    [
+        {
+            "type": "Folder",
+            "name": "ex00",
+            "content":
+            [
+                {
+                    "type": "Makefile"
+                },
+                {
+                    "type": "main" 
+                },
+                {
+                    "type": "Class",
+                    "name": "Bureaucrat",
+                    "othodox": true
+                }
+            ]
+        },
+        {
+            "type": "Folder",
+            "name": "ex01",
+            "content":
+            [
+                {
+                    "type": "Makefile"
+                },
+                {
+                    "type": "main" 
+                },
+                {
+                    "type": "Class",
+                    "name": "Bureaucrat",
+                    "othodox": true
+                },
+                {
+                    "type": "Class",
+                    "name": "Form",
+                    "othodox": true
+                }
+            ]
+        },
+        {
+            "type": "Folder",
+            "name": "ex02",
+            "content":
+            [
+                {
+                    "type": "Makefile"
+                },
+                {
+                    "type": "main" 
+                },
+                {
+                    "type": "Class",
+                    "name": "Bureaucrat",
+                    "othodox": true
+                },
+                {
+                    "type": "Class",
+                    "name": "Form",
+                    "othodox": true
+                }
+            ]
+        }
+    ]
+}
