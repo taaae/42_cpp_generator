@@ -1,10 +1,10 @@
 from config import *
 import os
 from typing import Iterable
+import shutil
 
 # class Action:
 #   def execute() -> executes everything from list of Actions
-
 class Module:
     def __init__(self, exercises: Iterable):
         self.execrises = exercises
@@ -12,18 +12,23 @@ class Module:
         for exercise in self.exercises:
             exercise.execute()
 
+gl_current_folder = '.'
+
 class Exercise:
     def __init__(self, foldername: str, actions: Iterable):
         self.foldername = foldername
         self.actions = actions
     def execute(self):
+        global gl_current_folder
         try:
             os.mkdir(self.foldername)
         except FileExistsError:
             print(f'Folder {self.foldername} already exists, aborting')
             return
+        gl_current_folder = self.foldername
         for action in self.actions:
             action.execute()
+        gl_current_folder = '.'
 
 # strings
 
@@ -97,7 +102,7 @@ def class_cpp(name: str, orthodox=True) -> str:
     else:
         return include(f"{name}.hpp")
 
-def main_text(headers: Iterable, folder: str) -> str:
+def main_text(headers: Iterable) -> str:
     return ''.join(include(h) for h in headers) + '\n' + wrap_function('int main', '')
 
 def makefile_text(name: str, sources: Iterable) -> str:
@@ -125,33 +130,46 @@ re: fclean all
 # printing some output
 
 class ClassFiles:
-    def __init__(self, classname: str, folder: str, orthodox=True):
+    def __init__(self, classname: str, orthodox=True):
         self.classname = classname
-        self.folder = folder
         self.orthodox = orthodox
     def execute(self):
-        with open(f'{self.folder}/{self.classname}.cpp', 'w') as cpp:
+        global gl_current_folder
+        with open(f'{gl_current_folder}/{self.classname}.cpp', 'w') as cpp:
             cpp.write(class_cpp(self.classname, self.orthodox))
-        with open(f'{self.folder}/{self.classname}.hpp', 'w') as hpp:
+        with open(f'{gl_current_folder}/{self.classname}.hpp', 'w') as hpp:
             hpp.write(class_hpp(self.classname, self.orthodox))
 
 class MakeFile:
-    def __init__(self, name: str, sources: Iterable, folder: str):
+    def __init__(self, name: str, sources: Iterable):
         self.name = name
         self.sources = sources
-        self.folder = folder
     def execute(self):
-        with open(f'{self.folder}/Makefile', 'w') as makefile:
+        global gl_current_folder
+        with open(f'{gl_current_folder}/Makefile', 'w') as makefile:
             makefile.write(makefile_text(self.name, self.sources))
 
 class MainCpp:
-    def __init__(self, headers: Iterable, folder: str):
+    def __init__(self, headers: Iterable):
         self.headers = headers
-        self.folder = folder
     def execute(self):
-        with open(f'{self.folder}/main.cpp', 'w') as main:
-            main.write(main_text(self.headers, self.folder))
+        global gl_current_folder
+        with open(f'{gl_current_folder}/main.cpp', 'w') as main:
+            main.write(main_text(self.headers))
+class CopyPaste:
+    def __init__(self, cp_from: str, cp_to: str):
+        self.cp_from = cp_from
+        self.cp_to = cp_to
+    def execute(self):
+        shutil.copy(self.cp_from, self.cp_to)
 
-ClassFiles('MyClass', 'temp', True).execute()
-MakeFile('program', ('MyClass.cpp', 'main.cpp'), 'temp').execute()
-MainCpp(('MyClass.hpp',), 'temp').execute()
+# ClassFiles('MyClass', 'temp', True).execute()
+# MakeFile('program', ('MyClass.cpp', 'main.cpp'), 'temp').execute()
+# MainCpp(('MyClass.hpp',), 'temp').execute()
+# CopyPaste('temp_from/a.cpp', 'temp/a.cpp').execute()
+Exercise('temp', [
+    ClassFiles('MyClass', True),
+    MakeFile('program', ['MyClass.cpp', 'main.cpp']),
+    MainCpp(['MyClass.hpp']),
+    CopyPaste('temp_from/a.cpp', 'temp/a.cpp')
+    ]).execute()
