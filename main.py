@@ -49,7 +49,9 @@ def desctructor_decl(name: str) -> str:
 
 def decl_to_definition(decl) -> str:
     def wrapper(name: str) -> str:
-        return decl(name).replace(name, f"{name}::{name}", 1).removesuffix(';\n') + f"{DEFINITION_INDENTATION}{{\n}}\n"
+        if 'operator' in decl(name):
+            return decl(name).replace('operator', f"{name}::operator", 1).removesuffix(';\n') + f"{DEFINITION_INDENTATION}{{\n\n}}\n"
+        return f"{name}::" + decl(name).removesuffix(';\n') + f"{DEFINITION_INDENTATION}{{\n\n}}\n"
     return wrapper
 
 def_constructor_def = decl_to_definition(def_constructor_decl)
@@ -66,7 +68,7 @@ def wrap_indentation(code: str) -> str:
     return ''.join(indent_line(line) for line in code.splitlines(keepends=True))
 
 def wrap_class(code: str, classname: str) -> str:
-    return f"class {classname} {{\n" + wrap_indentation(code) + '}\n'
+    return f"class {classname} {{\n" + wrap_indentation(code) + '};\n'
 
 # templates
 
@@ -91,3 +93,19 @@ def class_cpp(name: str, orthodox=True) -> str:
     else:
         return include(f"{name}.hpp")
 
+# module -> exercises
+# exercise -> create folder + files
+# files -> classes, makefile, main
+# copying files
+# printing some output
+
+class ClassFiles:
+    def __init__(self, classname: str, folder: str, orthodox=True):
+        self.classname = classname
+        self.folder = folder
+        self.orthodox = orthodox
+    def execute(self):
+        with open(f'{self.folder}/{self.classname}.cpp', 'w') as cpp:
+            cpp.write(class_cpp(self.classname, self.orthodox))
+        with open(f'{self.folder}/{self.classname}.hpp', 'w') as hpp:
+            hpp.write(class_hpp(self.classname, self.orthodox))
