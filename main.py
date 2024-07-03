@@ -56,8 +56,8 @@ def desctructor_decl(name: str) -> str:
 def decl_to_definition(decl) -> str:
     def wrapper(name: str) -> str:
         if 'operator' in decl(name):
-            return decl(name).replace('operator', f"{name}::operator", 1).removesuffix(';\n') + f"{DEFINITION_INDENTATION}{{\n\n}}\n"
-        return f"{name}::" + decl(name).removesuffix(';\n') + f"{DEFINITION_INDENTATION}{{\n\n}}\n"
+            return decl(name).replace('operator', f"{name}::operator", 1).removesuffix(';\n') + " {\n\n}\n"
+        return f"{name}::" + decl(name).removesuffix(';\n') + " {\n\n}\n"
     return wrapper
 
 def_constructor_def = decl_to_definition(def_constructor_decl)
@@ -69,8 +69,8 @@ desctructor_def = decl_to_definition(desctructor_decl)
 
 def wrap_indentation(code: str) -> str:
     indent_line = lambda line: line if line == '\n' \
-                    else PUBLIC_INDENTATION + line if line in ['public:\n', 'private:\n', 'protected:\n'] \
-                    else INDENTATION + line
+                    else ' ' + line if line in ['public:\n', 'private:\n', 'protected:\n'] \
+                    else '  ' + line
     return ''.join(indent_line(line) for line in code.splitlines(keepends=True))
 
 def wrap_class(classname: str, code: str) -> str:
