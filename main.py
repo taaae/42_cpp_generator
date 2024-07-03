@@ -2,6 +2,10 @@ from config import *
 import os
 from typing import Iterable
 import shutil
+from dataclasses import dataclass
+
+# TODO: make sure it's not cheating to generate all the declarations
+# and also maybe it's not cheating to generate delcaration from subjects (like Zombie* newZombie( std::string name );)
 
 # class Action:
 #   def execute() -> executes everything from list of Actions
@@ -22,9 +26,9 @@ class Exercise:
         global gl_current_folder
         try:
             os.mkdir(self.foldername)
+            print(f'Created folder {self.foldername}') # TODO: better print
         except FileExistsError:
-            print(f'Folder {self.foldername} already exists, aborting')
-            return
+            pass
         gl_current_folder = self.foldername
         for action in self.actions:
             action.execute()
@@ -32,6 +36,7 @@ class Exercise:
 
 # strings
 
+# TODO: use standart header guards instead (google codestyle)
 def pragma() -> str:
     return "#pragma once\n"
 
@@ -53,6 +58,7 @@ def copy_assignment_decl(name: str) -> str:
 def desctructor_decl(name: str) -> str:
     return f"~{name}();\n"
 
+# TODO: this is ugly
 def decl_to_definition(decl) -> str:
     def wrapper(name: str) -> str:
         if 'operator' in decl(name):
@@ -135,24 +141,30 @@ class ClassFiles:
         self.orthodox = orthodox
     def execute(self):
         global gl_current_folder
+        # TODO: add check that file already exists (and ask if you want to override it)
         with open(f'{gl_current_folder}/{self.classname}.cpp', 'w') as cpp:
             cpp.write(class_cpp(self.classname, self.orthodox))
         with open(f'{gl_current_folder}/{self.classname}.hpp', 'w') as hpp:
             hpp.write(class_hpp(self.classname, self.orthodox))
 
 class MakeFile:
+    # TODO: maybe make makefile automatically collect all the sources
+    # So it should 'know' about Exercise class
     def __init__(self, name: str, sources: Iterable):
         self.name = name
         self.sources = sources
     def execute(self):
         global gl_current_folder
+        # TODO: add check that file already exists (and ask if you want to override it)
         with open(f'{gl_current_folder}/Makefile', 'w') as makefile:
             makefile.write(makefile_text(self.name, self.sources))
 
 class MainCpp:
+    # TODO: make main know about all the headers
     def __init__(self, headers: Iterable):
         self.headers = headers
     def execute(self):
+        # TODO: add check that file already exists (and ask if you want to override it)
         global gl_current_folder
         with open(f'{gl_current_folder}/main.cpp', 'w') as main:
             main.write(main_text(self.headers))
@@ -161,6 +173,8 @@ class CopyPaste:
         self.cp_from = cp_from
         self.cp_to = cp_to
     def execute(self):
+        # TODO: add check that file already exists (and ask if you want to override it)
+        # TODO: add check that file cp_from exists
         shutil.copy(self.cp_from, self.cp_to)
 
 # ClassFiles('MyClass', 'temp', True).execute()
@@ -173,3 +187,70 @@ Exercise('temp', [
     MainCpp(['MyClass.hpp']),
     CopyPaste('temp_from/a.cpp', 'temp/a.cpp')
     ]).execute()
+
+Cpp01_Ex00 = Exercise('ex00', [
+    MakeFile('program', ['main.cpp', 'Zombie.cpp', 'newZombie.cpp', 'randomChump.cpp']),
+    MainCpp(['Zombie.hpp']),
+    ClassFiles('Zombie', False)])
+
+# Seems like I need more general methods to generate files
+# Maybe action that creates a file with content string inside
+# Strings should concatenate (includes, pragmas, functions (with class wrappers))
+# Also Exercise class should pass itself in its Actions (so that Makefile, main.cpp knows about .h, .cpp files)
+# Better structure: class Exercise has fields like Classes, .hpp, .cpp
+
+# Don't add copy flag, just make it generate file by default and write a warning message if not avaliable
+
+# Exercise:
+# files: name, copy_from, type: [class_header/source(orthdodox), main, makefile, source]
+
+# Cpp01_Ex01 = Exercise('ex01', [File(')])
+
+# Features:
+# Generating Files
+# Generating Makefile
+# Generating includes, header_guards
+# Generating class declarations
+# Generating class orthodox functions declarations
+# Generating other function declarations
+
+# strings
+# files (cpp/hpp/make)
+
+# maybe exercise should generate files itself
+# Exercise
+# foldername: str -> creates a folder (and also adds this prefix to all sources/headers etc)
+# sources: list[file(name, cp_from, code)] -> code just holds info about itself, generation in Exercise
+# headers: list[file(name, cp_from, code)]
+# makefile: bool (to generate/not) -> generates it useing sources
+# main: bool (to generate/not)
+
+# better: files with type in it
+
+@dataclass
+class Exercise:
+    foldername: str
+    classes: Iterable
+    sources: Iterable
+    headers: Iterable
+    has_makefile: bool=True
+    has_main: bool=True
+
+    def generate(self):
+        pass
+    def get_headers(self):
+        pass
+    def get_sources(self):
+        pass
+
+# Need to pass text function somehow
+
+# idk I might just write some crappy working code at the end (don't want to waste too much time)
+
+class Feedback:
+    # bunch of functions
+    def created_folder():
+        pass
+    def should_continue():
+        pass
+    # smth like this
