@@ -1,4 +1,3 @@
-from config import *
 import os
 from typing import Iterable
 import shutil
