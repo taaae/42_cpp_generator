@@ -1,4 +1,5 @@
 import argparse
+from prompt import warning
 
 module_exercises = {
     'cpp00': 3,
@@ -18,9 +19,9 @@ parser = argparse.ArgumentParser(description='Generate files for 42 cpp modules'
 parser.add_argument('module', choices=['cpp00', 'cpp01', 'cpp02', 'cpp03', 'cpp04', 'cpp05', 'cpp06', 'cpp07', 'cpp08', 'cpp09'], metavar='cpp_module')
 parser.add_argument('exercise', type=str, nargs='?')
 args = parser.parse_args()
-if args.exercise == None:
+if args.exercise == None: # TODO: exclude modules that doesn't require copypasting
     pass
-    # TODO: warning message here
+    # TODO: add warning message
 elif args.exercise not in module_exercises[args.module]:
     parser.error(f"argument exercise: invalid choice: '{args.exercise}' (choose from {module_exercises[args.module]})")
 
