@@ -7,16 +7,16 @@ def create_dir(dirname: str) -> bool:
     try:
         os.mkdir(dirname)
     except FileExistsError:
-        choice = msg_ask(f'Directory {dirname} already exists. Empty it?',
+        choice = msg_ask(f'Directory {colorize(dirname, Color.BLUE)} already exists. Empty it?',
                         options=['yes', 'no'], default='no')
         if choice == 'no':
             return False
         assert choice == 'yes'
         shutil.rmtree(dirname)
         os.mkdir(dirname)
-        msg(f'Cleared directory {dirname}')
+        msg(f'Cleared directory {colorize(dirname, Color.BLUE)}')
     else:
-        msg(f'Created directory {dirname}')
+        msg(f'Created directory {colorize(dirname, Color.BLUE)}')
     return True
 
 def create_file(file: str, content: str):

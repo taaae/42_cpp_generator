@@ -1,5 +1,5 @@
 import argparse
-from prompt import warning
+from prompt import msg_warning
 
 module_exercises = {
     'cpp00': 3,
@@ -20,8 +20,7 @@ parser.add_argument('module', choices=['cpp00', 'cpp01', 'cpp02', 'cpp03', 'cpp0
 parser.add_argument('exercise', type=str, nargs='?')
 args = parser.parse_args()
 if args.exercise == None: # TODO: exclude modules that doesn't require copypasting
-    pass
-    # TODO: add warning message
+    msg_warning(f'Generating the whole {args.module} at once. Generate exercises one by one to avoid manual copypasting. Example: py {parser.prog} cpp02 ex00')
 elif args.exercise not in module_exercises[args.module]:
     parser.error(f"argument exercise: invalid choice: '{args.exercise}' (choose from {module_exercises[args.module]})")
 

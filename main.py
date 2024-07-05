@@ -3,11 +3,6 @@ from typing import Iterable
 import shutil
 from dataclasses import dataclass
 
-# TODO: make sure it's not cheating to generate all the declarations
-# and also maybe it's not cheating to generate delcaration from subjects (like Zombie* newZombie( std::string name );)
-
-# class Action:
-#   def execute() -> executes everything from list of Actions
 class Module:
     def __init__(self, exercises: Iterable):
         self.execrises = exercises
