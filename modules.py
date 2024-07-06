@@ -1,72 +1,97 @@
 from actions import *
 from strings import *
 from arguments import *
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Iterable, Tuple
 import os
-from itertools import chain
+import itertools
+
+@dataclass
+class Cpp:
+    name: str
+    to_copy: bool=False
+    content: str=""
+    def generate(self, foldername: str, prevfoldername: str):
+        content = self.content
+        cpp_path = os.path.join(foldername, f"{self.name}.cpp")
+        if self.to_copy:
+            assert not prevfoldername is None
+            copy_file(file_from=cpp_path,
+                        file_to=os.path.join(self.prevfoldername, f"{self.name}.cpp"),
+                        default_content=content)
+        else:
+            create_file(cpp_path, content)
+
+@dataclass
+class Hpp:
+    name: str
+    to_copy: bool=False
+    content: str=""
+    def generate(self, foldername: str, prevfoldername: str):
+        content = self.content
+        hpp_path = os.path.join(foldername, f"{self.name}.hpp")
+        if self.to_copy:
+            assert not prevfoldername is None
+            copy_file(file_from=hpp_path,
+                        file_to=os.path.join(self.prevfoldername, f"{self.name}.hpp"),
+                        default_content=content)
+        else:
+            create_file(hpp_path, content)
+
+@dataclass
+class Cls:
+    name: str
+    orthodox: bool=False
+    to_copy: bool=False
+    
+    def hpp_content(self) -> str:
+        return class_hpp(self.name, self.orthodox)
+    def cpp_content(self) -> str:
+        return class_cpp(self.name, self.orthodox)
+    def generate(self, foldername: str, prevfoldername: str):
+        # header
+        content = self.hpp_content()
+        hpp_path = os.path.join(foldername, f"{self.name}.hpp")
+        if self.to_copy:
+            assert not prevfoldername is None
+            copy_file(file_from=hpp_path,
+                        file_to=os.path.join(self.prevfoldername, f"{self.name}.hpp"),
+                        default_content=content)
+        else:
+            create_file(hpp_path, content)
+        # cpp
+        content = self.cpp_content()
+        cpp_path = os.path.join(foldername, f"{self.name}.cpp")
+        if self.to_copy:
+            assert not prevfoldername is None
+            copy_file(file_from=cpp_path,
+                        file_to=os.path.join(self.prevfoldername, f"{self.name}.cpp"),
+                        default_content=content)
+        else:
+            create_file(cpp_path, content)
 
 @dataclass
 class Exercise:
-    program_name: str
     foldername: str
-    classes: Iterable[Tuple[str, bool, bool]] # name, orthodox, to_copy
-    sources: Iterable[Tuple[str, bool]] # name, to_copy
-    headers: Iterable[Tuple[str, bool]] # name, to_copy
+    program_name: str='program'
+    classes: Iterable[Cls] = field(default_factory=list) # name, orthodox, to_copy
+    sources: Iterable[Cpp] = field(default_factory=list) # name, to_copy
+    headers: Iterable[Hpp] = field(default_factory=list) # name, to_copy
     prevfoldername: str=None
     has_makefile: bool=True
     has_main: bool=True
+    main_name: str='main.cpp'
 
     def generate(self):
+        # start
         msg(f'Generating {colorize(self.foldername, Color.PURPLE)}')
         # folder
         if not create_dir(self.foldername):
             msg('Ok, stopping')
             return
-        # classes
-        for name, orthodox, to_copy in self.classes:
-            # header
-            content = class_hpp(name, orthodox)
-            hpp_path = os.path.join(self.foldername, f"{name}.hpp")
-            if to_copy:
-                assert not self.prev is None
-                copy_file(file_from=hpp_path,
-                            file_to=os.path.join(self.prevfoldername, f"{name}.hpp"),
-                            default_content=content)
-            else:
-                create_file(hpp_path, content)
-            # source
-            content = class_cpp(name, orthodox)
-            cpp_path = os.path.join(self.foldername, f"{name}.cpp")
-            if to_copy:
-                assert not self.prev is None
-                copy_file(file_from=cpp_path,
-                            file_to=os.path.join(self.prevfoldername, f"{name}.cpp"),
-                            default_content=content)
-            else:
-                create_file(cpp_path, content)
-        # sources
-        for name, to_copy in self.sources:
-            content = ""
-            cpp_path = os.path.join(self.foldername, f"{name}.cpp")
-            if to_copy:
-                assert not self.prev is None
-                copy_file(file_from=cpp_path,
-                            file_to=os.path.join(self.prevfoldername, f"{name}.cpp"),
-                            default_content=content)
-            else:
-                create_file(cpp_path, content)
-        # headers
-        for name, to_copy in self.headers:
-            content = ""
-            hpp_path = os.path.join(self.foldername, f"{name}.hpp")
-            if to_copy:
-                assert not self.prev is None
-                copy_file(file_from=hpp_path,
-                            file_to=os.path.join(self.prevfoldername, f"{name}.hpp"),
-                            default_content=content)
-            else:
-                create_file(hpp_path, content)
+        # classes, sources, headers
+        for file in itertools.chain(self.classes, self.sources, self.headers):
+            file.generate(self.foldername, self.prevfoldername)
         # makefile
         if self.has_makefile:
             content = makefile(self.program_name, self.get_sources())
@@ -74,14 +99,14 @@ class Exercise:
         # main
         if self.has_main:
             content = main_cpp(self.get_headers())
-            create_file(os.path.join(self.foldername, 'main.cpp'), content)
+            create_file(os.path.join(self.foldername, self.main_name), content)
         # end
         msg(f'Finished generating {colorize(self.foldername, Color.PURPLE)}')
 
     def get_headers(self):
-        return [f"{name}.hpp" for name in chain((c[0] for c in self.classes), [h[0] for h in self.headers])]
+        return [f"{name}.hpp" for name in (f.name for f in itertools.chain(self.classes, self.headers))]
     def get_sources(self):
-        return [f"{name}.cpp" for name in chain((c[0] for c in self.classes), [src[0] for src in self.sources])] + ['main.cpp'] * self.has_main
+        return [f"{name}.cpp" for name in (f.name for f in itertools.chain(self.classes, self.sources))] + [self.main_name] * self.has_main
 
 @dataclass
 class Module:
@@ -96,3 +121,13 @@ class Module:
 
 # ex00 = Exercise(program_name='program', foldername='folder', classes=[('Amazing', True, False), ('Notamazing', False, False)], sources=[('src', False)], headers=[('h', False)])
 # Module('cpp00', [ex00]).generate()
+
+exercises = {
+    'cpp00': {
+        'ex00': Exercise(program_name='megaphone', foldername='ex00', main_name='megaphone.cpp'),
+        'ex01' : Exercise(foldername='ex01'),
+        'ex02' : Exercise(foldername='ex02', classes=[Cls('Account')], main_name='tests.cpp')
+    } # TODO: ex02 requires to put custom text in tests.cpp and Account.cpp
+}
+
+Module('cpp01', exercises['cpp00'].values()).generate()

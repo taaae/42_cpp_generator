@@ -81,7 +81,7 @@ def class_cpp(name: str, orthodox=True) -> str:
         return include(f"{name}.hpp")
 
 def main_cpp(headers: Iterable) -> str:
-    return ''.join(include(h) for h in headers) + '\n' + wrap_function('int main', '')
+    return ''.join(include(h) for h in headers) + wrap_function('int main', '')
 
 def makefile(name: str, sources: Iterable) -> str:
     return f'''NAME = {name}
