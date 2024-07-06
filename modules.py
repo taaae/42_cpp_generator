@@ -1,8 +1,9 @@
 from actions import *
 from strings import *
 from arguments import *
+from addons import *
 from dataclasses import dataclass, field
-from typing import Iterable, Tuple
+from typing import Iterable
 import os
 import itertools
 
@@ -16,8 +17,8 @@ class Cpp:
         cpp_path = os.path.join(foldername, f"{self.name}.cpp")
         if self.to_copy:
             assert not prevfoldername is None
-            copy_file(file_from=cpp_path,
-                        file_to=os.path.join(self.prevfoldername, f"{self.name}.cpp"),
+            copy_file(file_from=os.path.join(prevfoldername, f"{self.name}.cpp"),
+                      file_to=cpp_path,
                         default_content=content)
         else:
             create_file(cpp_path, content)
@@ -32,8 +33,8 @@ class Hpp:
         hpp_path = os.path.join(foldername, f"{self.name}.hpp")
         if self.to_copy:
             assert not prevfoldername is None
-            copy_file(file_from=hpp_path,
-                        file_to=os.path.join(self.prevfoldername, f"{self.name}.hpp"),
+            copy_file(file_from=os.path.join(prevfoldername, f"{self.name}.hpp"),
+                      file_to=hpp_path,
                         default_content=content)
         else:
             create_file(hpp_path, content)
@@ -41,7 +42,7 @@ class Hpp:
 @dataclass
 class Cls:
     name: str
-    orthodox: bool=False
+    orthodox: bool=True
     to_copy: bool=False
     
     def hpp_content(self) -> str:
@@ -54,8 +55,8 @@ class Cls:
         hpp_path = os.path.join(foldername, f"{self.name}.hpp")
         if self.to_copy:
             assert not prevfoldername is None
-            copy_file(file_from=hpp_path,
-                        file_to=os.path.join(self.prevfoldername, f"{self.name}.hpp"),
+            copy_file(file_from=os.path.join(prevfoldername, f"{self.name}.hpp"),
+                      file_to=hpp_path,
                         default_content=content)
         else:
             create_file(hpp_path, content)
@@ -64,8 +65,8 @@ class Cls:
         cpp_path = os.path.join(foldername, f"{self.name}.cpp")
         if self.to_copy:
             assert not prevfoldername is None
-            copy_file(file_from=cpp_path,
-                        file_to=os.path.join(self.prevfoldername, f"{self.name}.cpp"),
+            copy_file(file_from=os.path.join(prevfoldername, f"{self.name}.cpp"),
+                      file_to=cpp_path,
                         default_content=content)
         else:
             create_file(cpp_path, content)
@@ -74,9 +75,9 @@ class Cls:
 class Exercise:
     foldername: str
     program_name: str='program'
-    classes: Iterable[Cls] = field(default_factory=list) # name, orthodox, to_copy
-    sources: Iterable[Cpp] = field(default_factory=list) # name, to_copy
-    headers: Iterable[Hpp] = field(default_factory=list) # name, to_copy
+    classes: Iterable[Cls] = field(default_factory=list)
+    sources: Iterable[Cpp] = field(default_factory=list)
+    headers: Iterable[Hpp] = field(default_factory=list)
     prevfoldername: str=None
     has_makefile: bool=True
     has_main: bool=True
@@ -124,10 +125,19 @@ class Module:
 
 exercises = {
     'cpp00': {
-        'ex00': Exercise(program_name='megaphone', foldername='ex00', main_name='megaphone.cpp'),
+        'ex00': Exercise(foldername='ex00', program_name='megaphone', main_name='megaphone.cpp'),
         'ex01' : Exercise(foldername='ex01'),
-        'ex02' : Exercise(foldername='ex02', classes=[Cls('Account')], main_name='tests.cpp')
-    } # TODO: ex02 requires to put custom text in tests.cpp and Account.cpp
+        'ex02' : Exercise(foldername='ex02', headers=[Hpp('Account', content=cpp00_ex02_Account_hpp)], sources=[Cpp('Account', content=class_cpp('Account', orthodox=False))], has_main=False)
+    },
+    'cpp01': {
+        'ex00': Exercise(foldername='ex00', classes=[Cls('Zombie', orthodox=False)], sources=[Cpp('newZombie', content='#include "Zombie.hpp"\n'), Cpp('randomChump', content='#include "Zombie.hpp"\n')]),
+        'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('Zombie', orthodox=False, to_copy=True)], sources=[Cpp('zombieHorde', content='#include "Zombie.hpp"\n')]),
+        'ex02': Exercise(foldername='ex02'),
+        'ex03': Exercise(foldername='ex03', classes=[Cls('Weapon', orthodox=False), Cls('zombieA', orthodox=False), Cls('zombieB', orthodox=False)]),
+        'ex04': Exercise(foldername='ex04'),
+        'ex05': Exercise(foldername='ex05', classes=[Cls('Harl', orthodox=False)]),
+        'ex06': Exercise(foldername='ex06', program_name='harlFilter', prevfoldername='ex05', classes=[Cls('Harl', orthodox=False, to_copy=True)])
+    }
 }
 
-Module('cpp01', exercises['cpp00'].values()).generate()
+Module('cpp01', exercises['cpp01'].values()).generate()
