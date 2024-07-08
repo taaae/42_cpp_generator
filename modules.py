@@ -130,14 +130,39 @@ exercises = {
         'ex02' : Exercise(foldername='ex02', headers=[Hpp('Account', content=cpp00_ex02_Account_hpp)], sources=[Cpp('Account', content=class_cpp('Account', orthodox=False))], has_main=False)
     },
     'cpp01': {
-        'ex00': Exercise(foldername='ex00', classes=[Cls('Zombie', orthodox=False)], sources=[Cpp('newZombie', content='#include "Zombie.hpp"\n'), Cpp('randomChump', content='#include "Zombie.hpp"\n')]),
-        'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('Zombie', orthodox=False, to_copy=True)], sources=[Cpp('zombieHorde', content='#include "Zombie.hpp"\n')]),
+        'ex00': Exercise(foldername='ex00', classes=[Cls('Zombie', orthodox=False)], sources=[Cpp('newZombie', content=f'{include("Zombie.hpp")}\n'), Cpp('randomChump', content=f'{include("Zombie.hpp")}\n')]),
+        'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('Zombie', orthodox=False, to_copy=True)], sources=[Cpp('zombieHorde', content=f'{include("Zombie.hpp")}\n')]),
         'ex02': Exercise(foldername='ex02'),
         'ex03': Exercise(foldername='ex03', classes=[Cls('Weapon', orthodox=False), Cls('zombieA', orthodox=False), Cls('zombieB', orthodox=False)]),
         'ex04': Exercise(foldername='ex04'),
         'ex05': Exercise(foldername='ex05', classes=[Cls('Harl', orthodox=False)]),
         'ex06': Exercise(foldername='ex06', program_name='harlFilter', prevfoldername='ex05', classes=[Cls('Harl', orthodox=False, to_copy=True)])
+    },
+    'cpp02': {
+        'ex00': Exercise(foldername='ex00', classes=[Cls('Fixed')]),
+        'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('Fixed', to_copy=True)]),
+        'ex02': Exercise(foldername='ex02', prevfoldername='ex01', classes=[Cls('Fixed', to_copy=True)]),
+        'ex03': Exercise(foldername='ex03', prevfoldername='ex02', classes=[Cls('Fixed', to_copy=True), Cls('Point')], sources=[Cpp('bsp')])
+    },
+    'cpp03': {
+        'ex00': Exercise(foldername='ex00', classes=[Cls('ClapTrap')]),
+        'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('ClapTrap', to_copy=True), Cls('ScavTrap')]),
+        'ex02': Exercise(foldername='ex02', prevfoldername='ex01', classes=[Cls('ClapTrap', to_copy=True), Cls('ScavTrap', to_copy=True), Cls('FragTrap')]),
+        'ex03': Exercise(foldername='ex03', prevfoldername='ex02', classes=[Cls('ClapTrap', to_copy=True), Cls('ScavTrap', to_copy=True), Cls('FragTrap', to_copy=True), Cls('DiamondTrap')])
+    },
+    'cpp04': {
+        'ex00': Exercise(foldername='ex00', classes=[Cls('Animal'), Cls('Dog'), Cls('Cat')]),
+        'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('Animal', to_copy=True), Cls('Dog', to_copy=True), Cls('Cat', to_copy=True), Cls('Brain')]),
+        'ex02': Exercise(foldername='ex02', prevfoldername='ex01', classes=[Cls('Animal', to_copy=True), Cls('Dog', to_copy=True), Cls('Cat', to_copy=True), Cls('Brain', to_copy=True)]),
+        'ex03': Exercise(foldername='ex03', classes=[Cls('AMateria'), Cls('Ice'), Cls('Cure'), Cls('ICharacter'), Cls('Character'), Cls('ImateriaSource'), Cls('MateriaSource')]) # TODO: check if AMateria.cpp & ICharacter.cpp & IMateriaSource.cpp are necessary
     }
 }
 
-Module('cpp01', exercises['cpp01'].values()).generate()
+
+if __name__ == '__main__':
+    modules = {name: Module(name, exercises[name].values()) for name in exercises.keys()}
+
+    if args.exercise == None:
+        modules[args.module].generate()
+    else:
+        exercises[args.module][args.exercise].generate()
