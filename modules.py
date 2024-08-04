@@ -155,6 +155,12 @@ exercises = {
         'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('Animal', to_copy=True), Cls('Dog', to_copy=True), Cls('Cat', to_copy=True), Cls('Brain')]),
         'ex02': Exercise(foldername='ex02', prevfoldername='ex01', classes=[Cls('Animal', to_copy=True), Cls('Dog', to_copy=True), Cls('Cat', to_copy=True), Cls('Brain', to_copy=True)]),
         'ex03': Exercise(foldername='ex03', classes=[Cls('AMateria'), Cls('Ice'), Cls('Cure'), Cls('ICharacter'), Cls('Character'), Cls('ImateriaSource'), Cls('MateriaSource')]) # TODO: check if AMateria.cpp & ICharacter.cpp & IMateriaSource.cpp are necessary
+    },
+    'cpp05': {
+        'ex00': Exercise(foldername='ex00', classes=[Cls('Bureaucrat')]),
+        'ex01': Exercise(foldername='ex01', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form')]),
+        'ex02': Exercise(foldername='ex02', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form', to_copy=True), Cls('ShrubberyCreationForm'), Cls('RobotomyRequestForm'), Cls('PresidentialPardonForm')]),
+        'ex03': Exercise(foldername='ex03', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form', to_copy=True), Cls('ShrubberyCreationForm', to_copy=True), Cls('RobotomyRequestForm', to_copy=True), Cls('PresidentialPardonForm', to_copy=True), Cls('Intern')])
     }
 }
 
