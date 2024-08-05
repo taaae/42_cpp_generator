@@ -1,4 +1,4 @@
-# py merge.py > generator.py
+# python3 merge.py > generator.py
 
 merge_order = ['strings', 'prompt', 'arguments', 'addons', 'actions', 'modules']
 
