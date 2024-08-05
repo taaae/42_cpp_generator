@@ -66,8 +66,8 @@ def class_decl(name: str, orthodox=True) -> str:
 
 def class_def(name: str) -> str:
     '''only for orthodox classes!'''
-    return default_constructor_def(name) + copy_constructor_def(name)\
-          + copy_assignment_def(name) + desctructor_def(name)
+    return default_constructor_def(name) + '\n' + copy_constructor_def(name)\
+          + '\n' + copy_assignment_def(name) + '\n' + desctructor_def(name)
 
 # vvv use only those vvv
 
