@@ -83,12 +83,15 @@ def class_cpp(name: str, orthodox=True) -> str:
 def main_cpp(headers: Iterable) -> str:
     return ''.join(include(h) for h in headers) + '\n' + wrap_function('int main', '')
 
-def makefile(name: str, sources: Iterable) -> str:
+def makefile(name: str, sources: Iterable, headers: Iterable) -> str:
     return f'''NAME = {name}
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 SRC = {' '.join(s for s in sources)}
+INC = {' '.join(h for h in headers)}
 
-all: $(SRC)
+all: $(NAME)
+
+$(NAME): $(SRC) $(INC)
 \tc++ $(CPPFLAGS) $(SRC) -o $(NAME)
 
 clean:
@@ -442,7 +445,7 @@ class Exercise:
             file.generate(self.foldername, self.prevfoldername)
         # makefile
         if self.has_makefile:
-            content = makefile(self.program_name, self.get_sources())
+            content = makefile(self.program_name, self.get_sources(), self.get_headers())
             create_file(os.path.join(self.foldername, 'Makefile'), content)
         # main
         if self.has_main:

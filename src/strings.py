@@ -83,12 +83,15 @@ def class_cpp(name: str, orthodox=True) -> str:
 def main_cpp(headers: Iterable) -> str:
     return ''.join(include(h) for h in headers) + '\n' + wrap_function('int main', '')
 
-def makefile(name: str, sources: Iterable) -> str:
+def makefile(name: str, sources: Iterable, headers: Iterable) -> str:
     return f'''NAME = {name}
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 SRC = {' '.join(s for s in sources)}
+INC = {' '.join(h for h in headers)}
 
-all: $(SRC)
+all: $(NAME)
+
+$(NAME): $(SRC) $(INC)
 \tc++ $(CPPFLAGS) $(SRC) -o $(NAME)
 
 clean:

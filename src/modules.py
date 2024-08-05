@@ -95,7 +95,7 @@ class Exercise:
             file.generate(self.foldername, self.prevfoldername)
         # makefile
         if self.has_makefile:
-            content = makefile(self.program_name, self.get_sources())
+            content = makefile(self.program_name, self.get_sources(), self.get_headers())
             create_file(os.path.join(self.foldername, 'Makefile'), content)
         # main
         if self.has_main:
