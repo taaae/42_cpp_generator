@@ -46,16 +46,16 @@ def desctructor_decl(name: str) -> str:
     return f"~{name}();\n"
 
 def default_constructor_def(name: str) -> str:
-    return f"{name}::{name}() {{\n\n}}\n"
+    return f"{name}::{name}() {{\n}}\n"
 
 def copy_constructor_def(name: str) -> str:
-    return f"{name}::{name}(const {name}& other) {{\n\n}}\n"
+    return f"{name}::{name}(const {name}& other) {{\n}}\n"
 
 def copy_assignment_def(name: str) -> str:
-    return f"{name}& {name}::operator=(const {name}& other) {{\n\n}}\n"
+    return f"{name}& {name}::operator=(const {name}& other) {{\n}}\n"
 
 def desctructor_def(name: str) -> str:
-    return f"{name}::~{name}() {{\n\n}}\n"
+    return f"{name}::~{name}() {{\n}}\n"
 
 def class_decl(name: str, orthodox=True) -> str:
     if orthodox:
@@ -66,8 +66,8 @@ def class_decl(name: str, orthodox=True) -> str:
 
 def class_def(name: str) -> str:
     '''only for orthodox classes!'''
-    return default_constructor_def(name) + '\n' + copy_constructor_def(name)\
-          + '\n' + copy_assignment_def(name) + '\n' + desctructor_def(name)
+    return default_constructor_def(name) + copy_constructor_def(name)\
+          + copy_assignment_def(name) + desctructor_def(name)
 
 # vvv use only those vvv
 
