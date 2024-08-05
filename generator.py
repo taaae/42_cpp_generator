@@ -46,16 +46,16 @@ def desctructor_decl(name: str) -> str:
     return f"~{name}();\n"
 
 def default_constructor_def(name: str) -> str:
-    return f"{name}::{name}(){{\n\n}}\n"
+    return f"{name}::{name}() {{\n\n}}\n"
 
 def copy_constructor_def(name: str) -> str:
-    return f"{name}::{name}(const {name}& other){{\n\n}}\n"
+    return f"{name}::{name}(const {name}& other) {{\n\n}}\n"
 
 def copy_assignment_def(name: str) -> str:
-    return f"{name}& {name}::operator=(const {name}& other){{\n\n}}\n"
+    return f"{name}& {name}::operator=(const {name}& other) {{\n\n}}\n"
 
 def desctructor_def(name: str) -> str:
-    return f"{name}::~{name}(){{\n\n}}\n"
+    return f"{name}::~{name}() {{\n\n}}\n"
 
 def class_decl(name: str, orthodox=True) -> str:
     if orthodox:
