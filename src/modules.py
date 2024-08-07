@@ -3,7 +3,7 @@ from strings import *
 from arguments import *
 from addons import *
 from dataclasses import dataclass, field
-from typing import Iterable
+from typing import Iterable, Callable
 import os
 import itertools
 
@@ -82,6 +82,7 @@ class Exercise:
     has_makefile: bool=True
     has_main: bool=True
     main_name: str='main.cpp'
+    custom_actions: Iterable[Callable] = field(default_factory=list)
 
     def generate(self):
         # start
@@ -102,6 +103,8 @@ class Exercise:
             content = main_cpp(self.get_headers())
             create_file(os.path.join(self.foldername, self.main_name), content)
         # end
+        for action in self.custom_actions:
+            action()
         msg(f'Finished generating {colorize(self.foldername, Color.PURPLE)}')
 
     def get_headers(self):
@@ -159,7 +162,7 @@ exercises = {
     'cpp05': {
         'ex00': Exercise(foldername='ex00', classes=[Cls('Bureaucrat')]),
         'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form')]),
-        'ex02': Exercise(foldername='ex02', prevfoldername='ex01', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form', to_copy=True), Cls('ShrubberyCreationForm'), Cls('RobotomyRequestForm'), Cls('PresidentialPardonForm')]),
+        'ex02': Exercise(foldername='ex02', prevfoldername='ex01', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form', to_copy=True), Cls('ShrubberyCreationForm'), Cls('RobotomyRequestForm'), Cls('PresidentialPardonForm')], custom_actions=[lambda: msg_warning("please rename Form to AForm in this exercise manually")]),
         'ex03': Exercise(foldername='ex03', prevfoldername='ex02', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form', to_copy=True), Cls('ShrubberyCreationForm', to_copy=True), Cls('RobotomyRequestForm', to_copy=True), Cls('PresidentialPardonForm', to_copy=True), Cls('Intern')])
     }
 }
