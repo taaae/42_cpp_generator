@@ -521,6 +521,11 @@ exercises = {
         'ex02': Exercise(foldername='ex02', classes=[Cls('Base', orthodox=False)], headers=[Hpp('A', content=class_hpp('A', orthodox=False)),
                                                                                             Hpp('B', content=class_hpp('B', orthodox=False)),
                                                                                             Hpp('C', content=class_hpp('C', orthodox=False))])
+    },
+    'cpp07': {
+        'ex00': Exercise(foldername='ex00', headers=[Hpp('whatever', content=wrap_header_guards('whatever', ''))]),
+        'ex01': Exercise(foldername='ex01', headers=[Hpp('Iter', content=wrap_header_guards('Iter', ''))]),
+        'ex02': Exercise(foldername='ex02', headers=[Hpp('Array', content=class_hpp('Array'))])
     }
 }
 
