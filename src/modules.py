@@ -164,6 +164,13 @@ exercises = {
         'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form')]),
         'ex02': Exercise(foldername='ex02', prevfoldername='ex01', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form', to_copy=True), Cls('ShrubberyCreationForm'), Cls('RobotomyRequestForm'), Cls('PresidentialPardonForm')], custom_actions=[lambda: msg_warning("please rename Form to AForm in this exercise manually")]), # TODO: maybe latter rename it automatically
         'ex03': Exercise(foldername='ex03', prevfoldername='ex02', classes=[Cls('Bureaucrat', to_copy=True), Cls('AForm', to_copy=True), Cls('ShrubberyCreationForm', to_copy=True), Cls('RobotomyRequestForm', to_copy=True), Cls('PresidentialPardonForm', to_copy=True), Cls('Intern')])
+    },
+    'cpp06': {
+        'ex00': Exercise(program_name='convert', foldername='ex00', classes=[Cls('ScalarConverter', orthodox=False)]),
+        'ex01': Exercise(foldername='ex01', classes=[Cls('Serializer', orthodox=False)], headers=[Hpp('Data', content=wrap_header_guards('DATA', ''))]),
+        'ex02': Exercise(foldername='ex02', classes=[Cls('Base', orthodox=False)], headers=[Hpp('A', content=class_hpp('A', orthodox=False)),
+                                                                                            Hpp('B', content=class_hpp('B', orthodox=False)),
+                                                                                            Hpp('C', content=class_hpp('C', orthodox=False))])
     }
 }
 
