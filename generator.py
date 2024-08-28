@@ -504,7 +504,8 @@ exercises = {
         'ex00': Exercise(foldername='ex00', classes=[Cls('Animal'), Cls('Dog'), Cls('Cat')]),
         'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('Animal', to_copy=True), Cls('Dog', to_copy=True), Cls('Cat', to_copy=True), Cls('Brain')]),
         'ex02': Exercise(foldername='ex02', prevfoldername='ex01', classes=[Cls('Animal', to_copy=True), Cls('Dog', to_copy=True), Cls('Cat', to_copy=True), Cls('Brain', to_copy=True)]),
-        'ex03': Exercise(foldername='ex03', classes=[Cls('AMateria'), Cls('Ice'), Cls('Cure'), Cls('ICharacter'), Cls('Character'), Cls('ImateriaSource'), Cls('MateriaSource')]) # TODO: check if AMateria.cpp & ICharacter.cpp & IMateriaSource.cpp are necessary
+        'ex03': Exercise(foldername='ex03', headers=[Hpp("ICharacter", content=class_hpp("ICharacter", orthodox=False)), Hpp("IMateriaSource", content=class_hpp("IMateriaSource", orthodox=False))],
+                          classes=[Cls('AMateria'), Cls('Ice'), Cls('Cure'), Cls('Character'), Cls('MateriaSource')])
     },
     'cpp05': {
         'ex00': Exercise(foldername='ex00', classes=[Cls('Bureaucrat')]),
