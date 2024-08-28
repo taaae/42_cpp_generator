@@ -157,12 +157,8 @@ parser = argparse.ArgumentParser(description='Generate files for 42 cpp modules'
 parser.add_argument('module', choices=['cpp00', 'cpp01', 'cpp02', 'cpp03', 'cpp04', 'cpp05', 'cpp06', 'cpp07', 'cpp08', 'cpp09'], metavar='cpp_module')
 parser.add_argument('exercise', type=str, nargs='?')
 args = parser.parse_args()
-if args.exercise == None: # TODO: exclude modules that doesn't require copypasting
-    msg_warning(f'Generating the whole {args.module} at once. Generate exercises one by one to avoid manual copypasting. Example: py {parser.prog} cpp02 ex00')
-elif args.exercise not in module_exercises[args.module]:
+if args.exercise is not None and args.exercise not in module_exercises[args.module]:
     parser.error(f"argument exercise: invalid choice: '{args.exercise}' (choose from {module_exercises[args.module]})")
-
-# TODO: add codestyle choice argument
 cpp00_ex02_Account_hpp = '''// ************************************************************************** //
 //                                                                            //
 //                Account.hpp for GlobalBanksters United                //
@@ -541,6 +537,8 @@ if __name__ == '__main__':
 
     if args.exercise == None:
         modules[args.module].generate()
+        if any(exercise.prevfoldername is not None for exercise in modules[args.module].exercises):
+            msg_warning(f'Generated the whole {args.module} at once. Generate exercises one by one to avoid manual copypasting. Example: py {parser.prog} cpp02 ex00')
     else:
         exercises[args.module][args.exercise].generate()
 

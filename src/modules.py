@@ -190,5 +190,7 @@ if __name__ == '__main__':
 
     if args.exercise == None:
         modules[args.module].generate()
+        if any(exercise.prevfoldername is not None for exercise in modules[args.module].exercises):
+            msg_warning(f'Generated the whole {args.module} at once. Generate exercises one by one to avoid manual copypasting. Example: py {parser.prog} cpp02 ex00')
     else:
         exercises[args.module][args.exercise].generate()
