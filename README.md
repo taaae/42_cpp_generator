@@ -1,7 +1,7 @@
 <h2 align="center">
   C++ Modules Generator
 </h2>
-A small Python script for 42 C++ modules, saving you from tedious manual work. Will generates makefile, classes, header guards, orthodox canonical form definitions etc.
+A small Python script for 42 C++ modules, saving you from tedious manual work. Will generate makefile, classes, header guards, orthodox canonical form definitions etc.
 
 <h2 align="center">
   Demo
