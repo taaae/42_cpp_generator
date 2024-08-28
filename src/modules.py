@@ -126,6 +126,23 @@ class Module:
 # ex00 = Exercise(program_name='program', foldername='folder', classes=[('Amazing', True, False), ('Notamazing', False, False)], sources=[('src', False)], headers=[('h', False)])
 # Module('cpp00', [ex00]).generate()
 
+def rename_form_to_aform():
+    def rename_form_in_file(oldpath, newpath = None):
+        if newpath is None:
+            newpath = oldpath
+        content = open(oldpath, 'r').read().replace("Form", "AForm").replace("FORM", "AFORM")
+        os.remove(oldpath)
+        open(newpath, 'w').write(content)
+    rename_form_in_file("./ex02/Form.cpp", "./ex02/AForm.cpp")
+    rename_form_in_file("./ex02/Form.hpp", "./ex02/AForm.hpp")
+    rename_form_in_file("./ex02/Bureaucrat.cpp")
+    rename_form_in_file("./ex02/Bureaucrat.hpp")
+    content = open("./ex02/main.cpp", 'r').read().replace('"Form.hpp"', '"AForm.hpp"')
+    open("./ex02/main.cpp", 'w').write(content)
+    content = open("./ex02/Makefile", 'r').read().replace(" Form.cpp", " AForm.cpp").replace(" Form.hpp", " AForm.hpp")
+    open("./ex02/Makefile", 'w').write(content)
+    msg("Successfully renamed Form to AForm")
+
 exercises = {
     'cpp00': {
         'ex00': Exercise(foldername='ex00', program_name='megaphone', main_name='megaphone.cpp'),
@@ -163,7 +180,7 @@ exercises = {
     'cpp05': {
         'ex00': Exercise(foldername='ex00', classes=[Cls('Bureaucrat')]),
         'ex01': Exercise(foldername='ex01', prevfoldername='ex00', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form')]),
-        'ex02': Exercise(foldername='ex02', prevfoldername='ex01', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form', to_copy=True), Cls('ShrubberyCreationForm'), Cls('RobotomyRequestForm'), Cls('PresidentialPardonForm')], custom_actions=[lambda: msg_warning("please rename Form to AForm in this exercise manually")]), # TODO: maybe latter rename it automatically
+        'ex02': Exercise(foldername='ex02', prevfoldername='ex01', classes=[Cls('Bureaucrat', to_copy=True), Cls('Form', to_copy=True), Cls('ShrubberyCreationForm'), Cls('RobotomyRequestForm'), Cls('PresidentialPardonForm')], custom_actions=[rename_form_to_aform]),
         'ex03': Exercise(foldername='ex03', prevfoldername='ex02', classes=[Cls('Bureaucrat', to_copy=True), Cls('AForm', to_copy=True), Cls('ShrubberyCreationForm', to_copy=True), Cls('RobotomyRequestForm', to_copy=True), Cls('PresidentialPardonForm', to_copy=True), Cls('Intern')])
     },
     'cpp06': {
