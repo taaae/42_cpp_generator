@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from typing import Iterable
 
 def wrap_header_guards(header: str, content: str) -> str:

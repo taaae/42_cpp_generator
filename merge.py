@@ -10,6 +10,8 @@ def line_includes_py_file(line: str) -> bool:
     return False
 
 generator_text = ""
+shebang = "#!/usr/bin/env python3\n"
+generator_text += shebang
 for module in merge_order:
     content = ''.join([line for line in open(f'src/{module}.py', 'r').readlines() if not line_includes_py_file(line)])
     generator_text += content
