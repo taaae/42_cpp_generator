@@ -16,6 +16,8 @@ Usage
 Copy `generator.py` in your C++ module repository:
 ```
 wget https://raw.githubusercontent.com/taaae/42_cpp_generator/main/generator.py
+# or
+curl -O https://raw.githubusercontent.com/taaae/42_cpp_generator/main/generator.py
 ```
 Run the script passing the module and exercise number as arguments:
 ```
