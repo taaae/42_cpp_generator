@@ -1,5 +1,4 @@
 import argparse
-from prompt import msg_warning
 
 module_exercises = {
     'cpp00': 3,

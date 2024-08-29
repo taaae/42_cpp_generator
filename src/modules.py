@@ -146,7 +146,7 @@ def rename_form_to_aform():
 exercises = {
     'cpp00': {
         'ex00': Exercise(foldername='ex00', program_name='megaphone', main_name='megaphone.cpp'),
-        'ex01' : Exercise(foldername='ex01'),
+        'ex01' : Exercise(foldername='ex01', classes=[Cls('PhoneBook', orthodox=False), Cls('Contact', orthodox=False)]),
         'ex02' : Exercise(foldername='ex02', headers=[Hpp('Account', content=cpp00_ex02_Account_hpp)], sources=[Cpp('Account', content=class_cpp('Account', orthodox=False))], has_main=False)
     },
     'cpp01': {
