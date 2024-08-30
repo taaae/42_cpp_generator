@@ -202,6 +202,11 @@ exercises = {
         'ex00': Exercise(exercise_name='ex00', headers=[Hpp('easyfind', content=wrap_header_guards('easyfind', ''))]),
         'ex01': Exercise(exercise_name='ex01', classes=[Cls('Span')]),
         'ex02': Exercise(exercise_name='ex02', headers=[Hpp('MutantStack', content=class_hpp('MutantStack', orthodox=False))])
+    },
+    'cpp09': {
+        'ex00': Exercise(program_name='btc', exercise_name='ex00', classes=[Cls('BitcoinExchange')]),
+        'ex01': Exercise(program_name='RPN', exercise_name='ex01', classes=[Cls('RPN')]),
+        'ex02': Exercise(program_name='PmergeMe', exercise_name='ex02', classes=[Cls('PmergeMe')])
     }
 }
 
