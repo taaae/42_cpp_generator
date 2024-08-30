@@ -27,3 +27,7 @@ Generating the whole module works as well (note that you will need to manually c
 ```
 python3 generator.py cpp05
 ```
+To view list of options:
+```
+python3 generator.py --help
+```
