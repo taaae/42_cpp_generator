@@ -506,7 +506,7 @@ exercises = {
         'ex00': Exercise(exercise_name='ex00', classes=[Cls('Zombie', orthodox=False)], sources=[Cpp('newZombie', content=f'{include("Zombie.hpp")}\n'), Cpp('randomChump', content=f'{include("Zombie.hpp")}\n')]),
         'ex01': Exercise(exercise_name='ex01', prevfoldername='ex00', classes=[Cls('Zombie', orthodox=False, to_copy=True)], sources=[Cpp('zombieHorde', content=f'{include("Zombie.hpp")}\n')]),
         'ex02': Exercise(exercise_name='ex02'),
-        'ex03': Exercise(exercise_name='ex03', classes=[Cls('Weapon', orthodox=False), Cls('zombieA', orthodox=False), Cls('zombieB', orthodox=False)]),
+        'ex03': Exercise(exercise_name='ex03', classes=[Cls('Weapon', orthodox=False), Cls('HumanA', orthodox=False), Cls('HumanB', orthodox=False)]),
         'ex04': Exercise(exercise_name='ex04'),
         'ex05': Exercise(exercise_name='ex05', classes=[Cls('Harl', orthodox=False)]),
         'ex06': Exercise(exercise_name='ex06', program_name='harlFilter', prevfoldername='ex05', classes=[Cls('Harl', orthodox=False, to_copy=True)])
